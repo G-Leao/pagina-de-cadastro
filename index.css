@@ -1,0 +1,157 @@
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #242443, #2b2b45);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    color: #fff;
+}
+
+.contacts {
+    width: 100%;
+    padding: 20px;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+nav a {
+    color: #fff;
+    font-size: 28px;
+    transition: transform 0.3s, color 0.3s;
+}
+
+nav a:hover {
+    color: #00ffd5;
+    transform: scale(1.2);
+}
+
+main { 
+    backdrop-filter: blur(10px);
+    padding: 50px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 900px;
+}
+
+
+
+input {
+  display: block;
+  margin: 25px 25px;
+  padding: 8px;
+  gap: 4px;
+}
+
+.valido {
+  border: 2px solid green;
+}
+
+.invalido {
+  border: 2px solid red;
+}
+
+.erro-msg {
+  color: red;
+  font-size: 12px;
+  margin-top: -8px;
+  margin-bottom: 8px;
+}
+
+main input {
+    width: 80%;
+    padding: 12px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+
+
+button {
+    width: 27%;
+    padding: 5px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    background: #00ffd5;
+    color: #000;
+    transition: background 0.3s;
+    margin: 4px;
+}
+
+ button:hover{
+         transform: scale(1.2s);
+         background-color: #00a6ff;
+         box-shadow: 0px 0px 5px #fff;
+        border-radius: 5em;
+         transition: 0.2s ease-in-out;
+         color: #fff;
+    }
+
+.usuarios{
+    width: 40%;
+    text-align: left;
+    background-color: #00003d;
+    border-radius: 2em;
+    text-align: center;
+    box-shadow: 02px 8px 25px rgba(0,0,0,0.3);
+    font-family: "Roboto Mono", monospace;
+    font-size: 13px;
+}
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+.form{
+    width: 46%;
+    background-color: #01012eae;
+    border-radius: 2em;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    align-items: center;
+    font-family: "Playfair Display", serif;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -45px;
+    
+}
+.form:focus{
+    outline: 2px solid #00ffd5;
+}
+
+.form input:hover{
+    border-radius: 1.3em;
+    transition: 0.3s ease-in-out;
+    box-shadow: 2px 2px 2px#00ffc8;
+}
+
+.form input, .form button{
+    width: 70%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.form button{
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    font-family: 'lora', italic;
+    
+}
+.form h1{
+    color: #80d2ff;
+}
