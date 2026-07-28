@@ -12,218 +12,220 @@ let editandoIndex = null;
 
 // ====== BLOQUEAR APENAS NÚMEROS NA IDADE ======
 idade.addEventListener("input", () => {
-    idade.value = idade.value.replace(/\D/g, "");
+  idade.value = idade.value.replace(/\D/g, "");
 });
 
 // ====== LIMPAR CAMPOS ======
-function limparCampos(){
-    nome.value = "";
-    email.value = "";
-    idade.value = "";
-    senha.value = "";
-    senha2.value = "";
+function limparCampos() {
+  nome.value = "";
+  email.value = "";
+  idade.value = "";
+  senha.value = "";
+  senha2.value = "";
 
-    document.querySelectorAll(".erro-msg").forEach(e => e.remove());
+  document.querySelectorAll(".erro-msg").forEach((e) => e.remove());
 
-    document.querySelectorAll("input").forEach(i => {
-        i.classList.remove("valido", "invalido");
-    });
+  document.querySelectorAll("input").forEach((i) => {
+    i.classList.remove("valido", "invalido");
+  });
 }
 
 // ====== MENSAGENS ======
 function mostrarErro(input, mensagem) {
+  input.classList.remove("valido");
+  input.classList.add("invalido");
 
-    input.classList.remove("valido");
-    input.classList.add("invalido");
+  let msg = input.nextElementSibling;
 
-    let msg = input.nextElementSibling;
+  if (!msg || !msg.classList.contains("erro-msg")) {
+    msg = document.createElement("small");
+    msg.classList.add("erro-msg");
+    input.after(msg);
+  }
 
-    if (!msg || !msg.classList.contains("erro-msg")) {
-        msg = document.createElement("small");
-        msg.classList.add("erro-msg");
-        input.after(msg);
-    }
-
-    msg.innerText = mensagem;
+  msg.innerText = mensagem;
 }
 
 function mostrarValido(input) {
+  input.classList.remove("invalido");
+  input.classList.add("valido");
 
-    input.classList.remove("invalido");
-    input.classList.add("valido");
+  let msg = input.nextElementSibling;
 
-    let msg = input.nextElementSibling;
-
-    if (msg && msg.classList.contains("erro-msg")) {
-        msg.remove();
-    }
+  if (msg && msg.classList.contains("erro-msg")) {
+    msg.remove();
+  }
 }
 
 // ====== VALIDAÇÕES ======
 function validarNome() {
-    const valor = nome.value.trim();
-    const regex = /^[A-Za-zÀ-ÿ]+(\s[A-Za-zÀ-ÿ]+)+$/;
+  const valor = nome.value.trim();
+  const regex = /^[A-Za-zÀ-ÿ]+(\s[A-Za-zÀ-ÿ]+)+$/;
 
-    if (valor === "") return mostrarErro(nome,"Nome obrigatório"), false;
-    if (valor.length < 5) return mostrarErro(nome,"Mínimo 5 caracteres"), false;
-    if (!regex.test(valor)) return mostrarErro(nome,"Nome e sobrenome"), false;
+  if (valor === "") return (mostrarErro(nome, "Nome obrigatório"), false);
+  if (valor.length < 5)
+    return (mostrarErro(nome, "Mínimo 5 caracteres"), false);
+  if (!regex.test(valor)) return (mostrarErro(nome, "Nome e sobrenome"), false);
 
-    mostrarValido(nome);
-    return true;
+  mostrarValido(nome);
+  return true;
 }
 
 function validarEmail() {
-    const valor = email.value.trim();
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const valor = email.value.trim();
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (valor === "") return mostrarErro(email,"Email obrigatório"), false;
-    if (!regex.test(valor)) return mostrarErro(email,"Email inválido"), false;
+  if (valor === "") return (mostrarErro(email, "Email obrigatório"), false);
+  if (!regex.test(valor)) return (mostrarErro(email, "Email inválido"), false);
 
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-    const duplicado = usuarios.find((u, i) => 
-        u.email === valor && i !== editandoIndex
-    );
+  const duplicado = usuarios.find(
+    (u, i) => u.email === valor && i !== editandoIndex,
+  );
 
-    if (duplicado) return mostrarErro(email,"Email já existe"), false;
+  if (duplicado) return (mostrarErro(email, "Email já existe"), false);
 
-    mostrarValido(email);
-    return true;
+  mostrarValido(email);
+  return true;
 }
 
 function validarIdade() {
-    const valor = parseInt(idade.value);
+  const valor = parseInt(idade.value);
 
-    if (idade.value === "") return mostrarErro(idade,"Idade obrigatória"), false;
-    if (isNaN(valor)) return mostrarErro(idade,"Só números"), false;
-    if (valor < 18 || valor > 120) return mostrarErro(idade,"18 a 120"), false;
+  if (idade.value === "")
+    return (mostrarErro(idade, "Idade obrigatória"), false);
+  if (isNaN(valor)) return (mostrarErro(idade, "Só números"), false);
+  if (valor < 18 || valor > 120) return (mostrarErro(idade, "18 a 120"), false);
 
-    mostrarValido(idade);
-    return true;
+  mostrarValido(idade);
+  return true;
 }
 
 function validarSenha() {
-    const valor = senha.value;
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  const valor = senha.value;
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
-    if (valor === "") return mostrarErro(senha,"Senha obrigatória"), false;
-    if (!regex.test(valor)) return mostrarErro(senha,"Senha fraca"), false;
+  if (valor === "") return (mostrarErro(senha, "Senha obrigatória"), false);
+  if (!regex.test(valor)) return (mostrarErro(senha, "Senha fraca"), false);
 
-    mostrarValido(senha);
-    return true;
+  mostrarValido(senha);
+  return true;
 }
 
 function validarConfirmacao() {
-    if (senha2.value === "") return mostrarErro(senha2,"Confirme senha"), false;
-    if (senha2.value !== senha.value) return mostrarErro(senha2,"Senhas diferentes"), false;
+  if (senha2.value === "")
+    return (mostrarErro(senha2, "Confirme senha"), false);
+  if (senha2.value !== senha.value)
+    return (mostrarErro(senha2, "Senhas diferentes"), false);
 
-    mostrarValido(senha2);
-    return true;
+  mostrarValido(senha2);
+  return true;
 }
 
 // ====== LISTAR USUÁRIOS ======
 function listarUsuarios() {
+  const lista = document.getElementById("listaUsuarios");
+  lista.innerHTML = "";
 
-    const lista = document.getElementById("listaUsuarios");
-    lista.innerHTML = "";
+  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  usuarios.forEach((user, index) => {
+    const li = document.createElement("li");
 
-    usuarios.forEach((user, index) => {
-
-        const li = document.createElement("li");
-
-        li.innerHTML = `
-            <strong>${user.nome}</strong> - ${user.email} (${user.idade})
-            <button onclick="editarUsuario(${index})">Editar</button>
-            <button onclick="removerUsuario(${index})">Excluir</button>
+    li.innerHTML = `
+            <div class="user-details">
+              <strong>${user.nome}</strong>
+              <span class="user-info">${user.email} (${user.idade})</span>
+            </div>
+            <div>
+              <button onclick="editarUsuario(${index})">Editar</button>
+              <button onclick="removerUsuario(${index})">Excluir</button>
+            </div>
         `;
 
-        lista.appendChild(li);
-    });
+    lista.appendChild(li);
+  });
 }
 
 // ====== EDITAR ======
-function editarUsuario(index){
+function editarUsuario(index) {
+  const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  const user = usuarios[index];
 
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
-    const user = usuarios[index];
+  nome.value = user.nome;
+  email.value = user.email;
+  idade.value = user.idade;
+  senha.value = user.senha;
+  senha2.value = user.senha;
 
-    nome.value = user.nome;
-    email.value = user.email;
-    idade.value = user.idade;
-    senha.value = user.senha;
-    senha2.value = user.senha;
+  editandoIndex = index;
 
-    editandoIndex = index;
-
-    botao.innerText = "Atualizar";
-    btnCancelar.style.display = "inline";
+  botao.innerText = "Atualizar";
+  btnCancelar.style.display = "inline";
 }
 
 // ====== CANCELAR ======
 btnCancelar.addEventListener("click", () => {
-    editandoIndex = null;
-    botao.innerText = "Cadastrar";
-    btnCancelar.style.display = "none";
-    limparCampos();
+  editandoIndex = null;
+  botao.innerText = "Cadastrar";
+  btnCancelar.style.display = "none";
+  limparCampos();
 });
 
 // ====== REMOVER ======
-function removerUsuario(index){
+function removerUsuario(index) {
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  usuarios.splice(index, 1);
 
-    usuarios.splice(index, 1);
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
 
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
-
-    listarUsuarios();
+  listarUsuarios();
 }
 
 // ====== SALVAR ======
-botao.addEventListener("click", function(e){
+botao.addEventListener("click", function (e) {
+  e.preventDefault();
 
-    e.preventDefault();
+  const v1 = validarNome();
+  const v2 = validarEmail();
+  const v3 = validarIdade();
+  const v4 = validarSenha();
+  const v5 = validarConfirmacao();
 
-    const v1 = validarNome();
-    const v2 = validarEmail();
-    const v3 = validarIdade();
-    const v4 = validarSenha();
-    const v5 = validarConfirmacao();
+  if (!(v1 && v2 && v3 && v4 && v5)) return;
 
-    if(!(v1 && v2 && v3 && v4 && v5)) return;
+  let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
 
-    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+  const usuario = {
+    nome: nome.value,
+    email: email.value,
+    idade: idade.value,
+    senha: senha.value,
+  };
 
-    const usuario = {
-        nome: nome.value,
-        email: email.value,
-        idade: idade.value,
-        senha: senha.value
-    };
+  if (editandoIndex !== null) {
+    usuarios[editandoIndex] = usuario;
+    alert("Usuário atualizado ✅");
+  } else {
+    usuarios.push(usuario);
+    alert("Cadastro realizado ✅");
+  }
 
-    if(editandoIndex !== null){
-        usuarios[editandoIndex] = usuario;
-        alert("Usuário atualizado ✅");
-    } else {
-        usuarios.push(usuario);
-        alert("Cadastro realizado ✅");
-    }
+  localStorage.setItem("usuarios", JSON.stringify(usuarios));
 
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+  editandoIndex = null;
+  botao.innerText = "Cadastrar";
+  btnCancelar.style.display = "none";
 
-    editandoIndex = null;
-    botao.innerText = "Cadastrar";
-    btnCancelar.style.display = "none";
-
-    limparCampos();
-    listarUsuarios();
+  limparCampos();
+  listarUsuarios();
 });
 
 // ====== BOTÃO LIMPAR ======
-btnLimpar.addEventListener("click", function(){
-    limparCampos();
+btnLimpar.addEventListener("click", function () {
+  limparCampos();
 });
 
 // ====== VALIDAÇÃO EM TEMPO REAL ======
